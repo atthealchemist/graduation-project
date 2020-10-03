@@ -19,8 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        shell: bash
-        working-directory: ${{env.GITHUB_WORKSPACE}}/graduation-project-system-backend/
+        working-directory: ${{ GITHUB_WORKSPACE }}/graduation-project-system-backend/
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
