@@ -55,7 +55,7 @@ jobs:
 
 
       - name: Pack executable into deb-package
-        run: fpm --config-files ${{ env.root }}/config.yml -t deb -n ${{ env.projectName }} -s dir ${{ env.root }}/dist/${{ env.projectName }}/=/usr/bin/${{ env.projectName }} ${{ env.root }}/config.yml=/etc/${{ env.projectName }}/config.yml
+        run: fpm --config-files ${{ env.root }}/config.yml -t deb -n ${{ env.projectName }} -p ${{ env.root }}/dist/ -s dir ${{ env.root }}/dist/${{ env.projectName }}/=/usr/bin/${{ env.projectName }} ${{ env.root }}/config.yml=/etc/${{ env.projectName }}/config.yml
 
       - name: Set env
         run:  echo ::set-env name=current::$(date "+%Y%m%d_%H%M")
