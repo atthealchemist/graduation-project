@@ -5,6 +5,10 @@ name: gpks-backend-ci
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the main branch
 
+env: 
+  root: $GITHUB_WORKSPACE/graduation-project-system-backend/
+
+
 on:
   push:
     branches: [ main ]
@@ -35,22 +39,18 @@ jobs:
         run: python3 -m pip install -U PyInstaller
 
       - name: Show contents of directory
-        run: ls -lah .
-        working-directory: $GITHUB_WORKSPACE/graduation-project-system-backend/
+        run: ls -lah ${{ env.root }}
 
       - name: Installing Python project dependencies
-        run: python3 -m pip install -r ./requirements.txt
-        working-directory: $GITHUB_WORKSPACE/graduation-project-system-backend/
+        run: python3 -m pip install -r ${{env.root}}/requirements.txt
 
 
       - name: Bundle with PyInstaller
-        run: python3 -m PyInstaller ./server.py --onefile -n gpks-server
-        working-directory: $GITHUB_WORKSPACE/graduation-project-system-backend/
+        run: python3 -m PyInstaller ${{env.root}}/server.py --onefile -n gpks-server
 
 
       - name: Pack executable into deb-package
-        run: fpm --config-files ./config.yml -t deb -n gpks-server -s dir ./dist/gpks-server/=/usr/bin/gpks-server ./config.yml=/etc/gpks-server/config.yml
-        working-directory: $GITHUB_WORKSPACE/graduation-project-system-backend/
+        run: fpm --config-files ${{env.root}}/config.yml -t deb -n gpks-server -s dir ${{env.root}}/dist/gpks-server/=/usr/bin/gpks-server ${{env.root}}/config.yml=/etc/gpks-server/config.yml
 
   
   download-deb-package:
