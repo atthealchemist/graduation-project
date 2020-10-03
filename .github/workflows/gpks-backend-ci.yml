@@ -28,7 +28,7 @@ jobs:
       - name: Installing system build prerequisites
         run: |
           sudo apt install ruby ruby-dev rubygems build-essential 
-          gem install --no-document fpm
+          sudo gem install --no-document fpm
       
       - name: Installing Python build prerequisites
         run: python -m pip install PyInstaller
