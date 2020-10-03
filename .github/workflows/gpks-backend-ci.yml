@@ -140,19 +140,19 @@ jobs:
           architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
 
       - name: Check python version
-        run: python3 --version
+        run: python -c "import sys; print(sys.version)"
       
       - name: Installing Python build prerequisites
-        run: python3 -m pip install -U PyInstaller
+        run: python -m pip install -U PyInstaller
 
       # - name: Show contents of directory
       #   run: ls -lah ${{ env.root }}
 
       - name: Installing Python project dependencies
-        run: python3 -m pip install -r ${{ env.root }}/requirements.txt
+        run: python -m pip install -r ${{ env.root }}/requirements.txt
 
       - name: Bundle with PyInstaller
-        run: python3 -m PyInstaller --distpath ${{ env.distWindows }} ${{ env.root }}/server.py --onefile -n ${{ env.projectName }}
+        run: python -m PyInstaller --distpath ${{ env.distWindows }} ${{ env.root }}/server.py --onefile -n ${{ env.projectName }}
       
       - name: Run Inno Setup compiler
         run: iscc /p /O "${{ env.bundleWindows }}" /F "${{ env.projectName }}-windows-installer" /S byparam=$p "${{ env.root }}\\Installer\\${{ env.projectName }}.iss"
