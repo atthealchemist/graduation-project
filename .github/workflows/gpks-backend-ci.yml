@@ -69,7 +69,7 @@ jobs:
           path: ${{ env.root }}/dist/
 
       - name: Show current root path
-        run: ls -lah ${{ env.root }}/
+        run: ls -lah .
         
       - name: Show current dist path
         run: ls -lah ${{ env.root }}/dist/
