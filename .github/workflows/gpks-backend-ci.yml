@@ -36,6 +36,9 @@ jobs:
       - name: Installing Python build prerequisites
         run: python3 -m pip install -U PyInstaller
 
+      - name: Show contents of directory
+        run: ls -lah .
+
       - name: Installing Python project dependencies
         run: python3 -m pip install -r ./requirements.txt
 
