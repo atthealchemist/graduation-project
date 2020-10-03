@@ -4,6 +4,7 @@ name: gpks-backend-ci
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the main branch
+
 on:
   push:
     branches: [ main ]
@@ -16,6 +17,10 @@ jobs:
   build-deb-package:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{env.GITHUB_WORKSPACE}}/graduation-project-system-backend/
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -23,7 +28,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Switch to backend project directory
-        run: cd $GITHUB_WORKSPACE/graduation-project-system-backend/
+        run: cd ${{project-folder}}
 
       - name: Installing system build prerequisites
         run: |
@@ -40,10 +45,10 @@ jobs:
         run: ls -lah .
 
       - name: Installing Python project dependencies
-        run: python3 -m pip install -r ./requirements.txt
+        run: python3 -m pip install -r ./graduation-project-system-backend/requirements.txt
 
       - name: Bundle with PyInstaller
-        run: python3 -m PyInstaller ./server.py --onefile -n gpks-server
+        run: python3 -m PyInstaller ./graduation-project-system-backend/server.py --onefile -n gpks-server
 
       - name: Pack executable into deb-package
         run: fpm --config-files ./config.yml -t deb -n gpks-server -s dir ./dist/gpks-server/=/usr/bin/gpks-server ./config.yml=/etc/gpks-server/config.yml
