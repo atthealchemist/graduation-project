@@ -67,6 +67,12 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
+      
+      - name: Show dir
+        run: ls -lah ${{ env.root }}
+
+      - name: Show dir up
+        run: ls -lah ${{ env.root }}/../
 
       - name: Upload Release Asset
         id: upload-release-asset 
