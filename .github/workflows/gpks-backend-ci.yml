@@ -7,6 +7,7 @@ name: gpks-backend-ci
 
 env: 
   root: ./graduation-project-system-backend/
+  projectName: gpks-server
 
 
 on:
@@ -48,22 +49,44 @@ jobs:
 
 
       - name: Bundle with PyInstaller
-        run: python3.8 -m PyInstaller --distpath ${{env.root}}/dist ${{env.root}}/server.py --onefile -n gpks-server
+        run: python3.8 -m PyInstaller --distpath ${{env.root}}/dist ${{env.root}}/server.py --onefile -n ${{ env.projectName }}
 
 
       - name: Pack executable into deb-package
-        run: fpm --config-files ${{env.root}}/config.yml -t deb -n gpks-server -s dir ${{env.root}}/dist/gpks-server/=/usr/bin/gpks-server ${{env.root}}/config.yml=/etc/gpks-server/config.yml
+        run: fpm --config-files ${{env.root}}/config.yml -t deb -n ${{ env.projectName }} -s dir ${{env.root}}/dist/${{ env.projectName }}/=/usr/bin/${{ env.projectName }} ${{env.root}}/config.yml=/etc/${{ env.projectName }}/config.yml
 
   
-  upload-deb-package:
+  release-deb-package:
     runs-on: ubuntu-latest
     needs: build-deb-package
     steps:
       - name: Upload built deb-package
         uses: actions/upload-artifact@v2
         with:
-          name: gpks-server
+          name: ${{ env.projectName }}
           path: ${{env.root}}/dist/
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./${{ env.projectName }}.zip
+          asset_name: ${{ env.projectName }}.zip
+          asset_content_type: application/zip
 
 
       # Runs a set of commands using the runners shell
