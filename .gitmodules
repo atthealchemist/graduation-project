@@ -1,0 +1,6 @@
+[submodule "graduation-project-system-frontend"]
+	path = graduation-project-system-frontend
+	url = https://github.com/atthealchemist/graduation-project-system-frontend.git
+[submodule "graduation-project-system-backend"]
+	path = graduation-project-system-backend
+	url = https://github.com/atthealchemist/graduation-project-system-backend.git
