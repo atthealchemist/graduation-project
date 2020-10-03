@@ -17,9 +17,6 @@ jobs:
   build-deb-package:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: $GITHUB_WORKSPACE/graduation-project-system-backend/
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -39,15 +36,22 @@ jobs:
 
       - name: Show contents of directory
         run: ls -lah .
+        working-directory: $GITHUB_WORKSPACE/graduation-project-system-backend/
 
       - name: Installing Python project dependencies
         run: python3 -m pip install -r ./requirements.txt
+        working-directory: $GITHUB_WORKSPACE/graduation-project-system-backend/
+
 
       - name: Bundle with PyInstaller
         run: python3 -m PyInstaller ./server.py --onefile -n gpks-server
+        working-directory: $GITHUB_WORKSPACE/graduation-project-system-backend/
+
 
       - name: Pack executable into deb-package
         run: fpm --config-files ./config.yml -t deb -n gpks-server -s dir ./dist/gpks-server/=/usr/bin/gpks-server ./config.yml=/etc/gpks-server/config.yml
+        working-directory: $GITHUB_WORKSPACE/graduation-project-system-backend/
+
   
   download-deb-package:
     runs-on: ubuntu-latest
