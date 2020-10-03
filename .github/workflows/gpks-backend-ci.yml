@@ -45,15 +45,15 @@ jobs:
         run: ls -lah ${{ env.root }}
 
       - name: Installing Python project dependencies
-        run: python3.8 -m pip install -r ${{env.root}}/requirements.txt
+        run: python3.8 -m pip install -r ${{ env.root }}/requirements.txt
 
 
       - name: Bundle with PyInstaller
-        run: python3.8 -m PyInstaller --distpath ${{env.root}}/dist ${{env.root}}/server.py --onefile -n ${{ env.projectName }}
+        run: python3.8 -m PyInstaller --distpath ${{ env.root }}/dist ${{ env.root }}/server.py --onefile -n ${{ env.projectName }}
 
 
       - name: Pack executable into deb-package
-        run: fpm --config-files ${{env.root}}/config.yml -t deb -n ${{ env.projectName }} -s dir ${{env.root}}/dist/${{ env.projectName }}/=/usr/bin/${{ env.projectName }} ${{env.root}}/config.yml=/etc/${{ env.projectName }}/config.yml
+        run: fpm --config-files ${{ env.root }}/config.yml -t deb -n ${{ env.projectName }} -s dir ${{ env.root }}/dist/${{ env.projectName }}/=/usr/bin/${{ env.projectName }} ${{ env.root }}/config.yml=/etc/${{ env.projectName }}/config.yml
 
   
   release-deb-package:
@@ -64,7 +64,13 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{ env.projectName }}
-          path: ${{env.root}}/dist/
+          path: ${{ env.root }}/dist/
+
+      - name: Show current root path
+        run: ls -lah ${{ env.root }}/
+        
+      - name: Show current dist path
+        run: ls -lah ${{ env.root }}/dist/
 
       - name: Create Release
         id: create_release
@@ -84,7 +90,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./${{ env.projectName }}.zip
+          asset_path: ${{ env.root }}/dist/${{ env.projectName }}.zip
           asset_name: ${{ env.projectName }}.zip
           asset_content_type: application/zip
 
