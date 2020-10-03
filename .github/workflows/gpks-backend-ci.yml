@@ -150,6 +150,9 @@ jobs:
 
       - name: Installing Python project dependencies
         run: python -m pip install -r ${{ env.root }}/requirements.txt
+      
+      - name: Installing uvicorn without uvloop
+        run: python -m pip install --no-deps uvicorn
 
       - name: Bundle with PyInstaller
         run: python -m PyInstaller --distpath ${{ env.distWindows }} ${{ env.root }}/server.py --onefile -n ${{ env.projectName }}
