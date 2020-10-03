@@ -31,16 +31,16 @@ jobs:
           sudo gem install --no-document fpm
       
       - name: Check python version
-        run: python --version
+        run: python3 --version
       
       - name: Installing Python build prerequisites
-        run: python -m pip install -U PyInstaller
+        run: python3 -m pip install -U PyInstaller
 
       - name: Installing Python project dependencies
-        run: python -m pip install -r requirements.txt
+        run: python3 -m pip install -r requirements.txt
 
       - name: Bundle with PyInstaller
-        run: python -m PyInstaller ./server.py --onefile -n gpks-server
+        run: python3 -m PyInstaller ./server.py --onefile -n gpks-server
 
       - name: Pack executable into deb-package
         run: fpm --config-files ./config.yml -t deb -n gpks-server -s dir ./dist/gpks-server/=/usr/bin/gpks-server ./config.yml=/etc/gpks-server/config.yml
