@@ -69,10 +69,10 @@ jobs:
       - name: Set env
         run:  echo ::set-env name=current::$(date "+%Y%m%d_%H%M")
 
-      - name: Show dir
+      - name: Show root
         run: ls -lah ${{ env.root }}
 
-      - name: Show dir up
+      - name: Show root up
         run: ls -lah ${{ env.root }}/../
 
       - name: Show dist folder
@@ -80,6 +80,12 @@ jobs:
       
       - name: Show bundle folder
         run: ls -lah ${{ env.bundleLinux }}
+      
+      - name: Archive bundle
+        run: zip --junk-paths ${{ env.bundleLinux }}
+      
+      - name: Show root
+        run: ls -lah ${{ env.root }}
 
       - name: Create Release
         id: create_release
@@ -99,9 +105,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ${{ env.distLinux }}/
+          asset_path: ${{ env.root }}/bundle.zip
           asset_name: ${{ env.projectName }}
-          asset_content_type: application/deb
+          asset_content_type: application/zip
   
   # release-deb-package:
   #   runs-on: ubuntu-latest
