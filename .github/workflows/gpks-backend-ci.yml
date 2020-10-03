@@ -75,6 +75,12 @@ jobs:
       - name: Show dir up
         run: ls -lah ${{ env.root }}/../
 
+      - name: Show dist folder
+        run: ls -lah ${{ env.distLinux }}
+      
+      - name: Show bundle folder
+        run: ls -lah ${{ env.bundleLinux }}
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
