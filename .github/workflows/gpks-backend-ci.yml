@@ -6,7 +6,7 @@ name: gpks-backend-ci
 # events but only for the main branch
 
 env: 
-  root: ./graduation-project-system-backend/
+  root: ./graduation-project-system/graduation-project-system-backend/
   projectName: gpks-server
 
 
