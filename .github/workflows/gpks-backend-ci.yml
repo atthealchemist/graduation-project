@@ -55,14 +55,15 @@ jobs:
         run: fpm --config-files ${{env.root}}/config.yml -t deb -n gpks-server -s dir ${{env.root}}/dist/gpks-server/=/usr/bin/gpks-server ${{env.root}}/config.yml=/etc/gpks-server/config.yml
 
   
-  download-deb-package:
+  upload-deb-package:
     runs-on: ubuntu-latest
     needs: build-deb-package
     steps:
-      - name: Download built deb-package
-        uses: actions/download-artifact@v2
+      - name: Upload built deb-package
+        uses: actions/upload-artifact@v2
         with:
-          name: gpks-server-linux
+          name: gpks-server
+          path: ${{env.root}}/dist/
 
 
       # Runs a set of commands using the runners shell
