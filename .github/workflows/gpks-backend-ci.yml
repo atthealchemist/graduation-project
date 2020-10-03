@@ -8,10 +8,10 @@ name: gpks-backend-ci
 env:
   projectName: gpks-server
   root: ./graduation-project-system-backend/
-  distWindows: ${{ root }}/dist/windows/
-  distLinux: ${{ root }}/dist/linux/
-  bundleWindows: ${{ root }}/bundle/windows/
-  bundleLinux: ${{ root }}/bundle/linux/
+  distWindows: ./graduation-project-system-backend/dist/windows/
+  distLinux: ./graduation-project-system-backend/dist/linux/
+  bundleWindows: ./graduation-project-system-backend/bundle/windows/
+  bundleLinux: ./graduation-project-system-backend/bundle/linux/
 
 
 on:
