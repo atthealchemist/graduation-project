@@ -8,6 +8,7 @@ name: gpks-backend-ci
 env:
   projectName: gpks-server
   root: ./graduation-project-system-backend/
+  rootUp: ./graduation-project-system-backend/../
   distWindows: ./graduation-project-system-backend/dist/windows/
   distLinux: ./graduation-project-system-backend/dist/linux/
   bundleWindows: ./graduation-project-system-backend/bundle/windows/
@@ -100,7 +101,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ${{ env.root }}/bundle_linux.zip
+          asset_path: ${{ env.rootUp }}/bundle_linux.zip
           asset_name: ${{ env.projectName }}_linux
           asset_content_type: application/zip
   
