@@ -27,8 +27,8 @@ jobs:
 
       - name: Installing system build prerequisites
         run: |
-          sudo apt install ruby ruby-dev rubygems build-essential python3 python3-pip python3-setuptools
-          sudo gem install --no-document fpm
+          sudo apt install -y ruby ruby-dev rubygems build-essential python3 python3-pip python3-setuptools python3-venv python3-wheel
+          sudo gem install -y --no-document fpm
       
       - name: Check python version
         run: python3 --version
@@ -37,7 +37,7 @@ jobs:
         run: python3 -m pip install -U PyInstaller
 
       - name: Installing Python project dependencies
-        run: python3 -m pip install -r requirements.txt
+        run: python3 -m pip install -r ./requirements.txt
 
       - name: Bundle with PyInstaller
         run: python3 -m PyInstaller ./server.py --onefile -n gpks-server
