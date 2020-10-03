@@ -58,20 +58,18 @@ jobs:
       - name: Installing Python project dependencies
         run: python3.8 -m pip install -r ${{ env.root }}/requirements.txt
 
-
       - name: Bundle with PyInstaller
         run: python3.8 -m PyInstaller --distpath ${{ env.distLinux }} ${{ env.root }}/server.py --onefile -n ${{ env.projectName }}
-
 
       - name: Pack executable into deb-package
         run: fpm --config-files ${{ env.root }}/config.yml -t deb -n ${{ env.projectName }} -p ${{ env.bundleLinux }} -s dir ${{ env.distLinux }}/${{ env.projectName }}/=/usr/bin/${{ env.projectName }} ${{ env.root }}/config.yml=/etc/${{ env.projectName }}/config.yml
 
-      - name: Set env
-        run:  echo ::set-env name=current::$(date "+%Y%m%d_%H%M")
-
+      - name: Archive bundle
+        run: zip -r bundle_linux.zip ${{ env.bundleLinux }}/
+      
       - name: Show root
         run: ls -lah ${{ env.root }}
-
+      
       - name: Show root up
         run: ls -lah ${{ env.root }}/../
 
@@ -81,11 +79,8 @@ jobs:
       - name: Show bundle folder
         run: ls -lah ${{ env.bundleLinux }}
       
-      - name: Archive bundle
-        run: zip -r bundle_linux.zip ${{ env.bundleLinux }}/
-      
-      - name: Show root
-        run: ls -lah ${{ env.root }}
+      - name: Set release datetime
+        run:  echo ::set-env name=current::$(date "+%Y%m%d_%H%M")
 
       - name: Create Release
         id: create_release
