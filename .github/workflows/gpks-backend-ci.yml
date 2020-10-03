@@ -53,8 +53,8 @@ jobs:
       - name: Installing Python build prerequisites
         run: python3.8 -m pip install -U PyInstaller
 
-      - name: Show contents of directory
-        run: ls -lah ${{ env.root }}
+      # - name: Show contents of directory
+      #   run: ls -lah ${{ env.root }}
 
       - name: Installing Python project dependencies
         run: python3.8 -m pip install -r ${{ env.root }}/requirements.txt
@@ -66,19 +66,19 @@ jobs:
         run: fpm --config-files ${{ env.root }}/config.yml -t deb -n ${{ env.projectName }} -p ${{ env.bundleLinux }} -s dir ${{ env.distLinux }}/${{ env.projectName }}/=/usr/bin/${{ env.projectName }} ${{ env.root }}/config.yml=/etc/${{ env.projectName }}/config.yml
 
       - name: Archive bundle
-        run: zip -r bundle_linux.zip ${{ env.bundleLinux }}/
+        run: zip -j -r bundle_linux.zip ${{ env.bundleLinux }}/
       
-      - name: Show root
-        run: ls -lah ${{ env.root }}
+      # - name: Show root
+      #   run: ls -lah ${{ env.root }}
       
-      - name: Show root up
-        run: ls -lah ${{ env.root }}/../
+      # - name: Show root up
+      #   run: ls -lah ${{ env.root }}/../
 
-      - name: Show dist folder
-        run: ls -lah ${{ env.distLinux }}
+      # - name: Show dist folder
+      #   run: ls -lah ${{ env.distLinux }}
       
-      - name: Show bundle folder
-        run: ls -lah ${{ env.bundleLinux }}
+      # - name: Show bundle folder
+      #   run: ls -lah ${{ env.bundleLinux }}
       
       - name: Set release datetime
         run:  echo ::set-env name=current::$(date "+%Y%m%d_%H%M")
@@ -91,6 +91,28 @@ jobs:
         with:
           tag_name: v${{ env.current }}_linux
           release_name: Linux release ${{ env.current }}
+          body: |
+            ## Linux release ${{ env.current }} changes
+
+            History from `${{ steps.attrs.outputs.tail }}` to `${{ steps.attrs.outputs.head }}`
+
+            ### Commits
+
+            ${{ steps.attrs.outputs.commits }}
+
+            ### Pull Requests
+
+            ${{ steps.attrs.outputs.prs }}
+
+            ### Contributors
+
+            ${{ steps.attrs.outputs.contributors }}
+
+            ### Files
+
+            ```
+            ${{ steps.attrs.outputs.files }}
+            ```
           draft: false
           prerelease: false
 
@@ -102,7 +124,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
           asset_path: ${{ env.rootUp }}/bundle_linux.zip
-          asset_name: ${{ env.projectName }}_linux
+          asset_name: ${{ env.projectName }}_linux.zip
           asset_content_type: application/zip
   
   # release-deb-package:
